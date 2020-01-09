@@ -604,6 +604,8 @@
 `spline_values` <- function(smooth, newdata, model, unconditional,
                             overall_uncertainty = TRUE, term) {
     X <- PredictMat(smooth, newdata)   # prediction matrix
+    if(any(grepl('mpi', class(smooth))))
+        X <- X[,-1]
     start <- smooth[["first.para"]]
     end <- smooth[["last.para"]]
     para.seq <- start:end
