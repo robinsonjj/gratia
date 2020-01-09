@@ -513,11 +513,11 @@
         xlab <- term_label
     }
     if (missing(ylab)) {
-        ylab <- sprintf("Partial effect of %s", term_label)
+        ylab <- 'Effect'
     }
 
     ## add labelling to plot
-    plt <- plt + labs(x = xlab, y = ylab, title = title, subtitle = subtitle,
+    plt <- plt + labs(x = xlab, y = ylab, title = term_label, subtitle = subtitle,
                       caption = caption)
 
     plt
