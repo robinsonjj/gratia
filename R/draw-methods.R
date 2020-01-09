@@ -68,6 +68,7 @@
                                        xlab, ylab,
                                        title = NULL, subtitle = NULL,
                                        caption = NULL,
+                                       se = TRUE,
                                        ...) {
     smooth_var <- names(object)[3L]
 
@@ -75,11 +76,11 @@
     object[["upper"]] <- object[["est"]] + (2 * object[["se"]])
     object[["lower"]] <- object[["est"]] - (2 * object[["se"]])
 
-    plt <- ggplot(object, aes_(x = as.name(smooth_var), y = ~ est, group = ~ smooth)) +
-        geom_ribbon(mapping = aes_string(ymin = "lower",
+    plt <- ggplot(object, aes_(x = as.name(smooth_var), y = ~ est, group = ~ smooth)) + geom_line()
+    if(se)
+      plt <- plt + geom_ribbon(mapping = aes_string(ymin = "lower",
                                          ymax = "upper"),
-                    alpha = 0.2) +
-        geom_line()
+                    alpha = 0.2)
 
     ## default axis labels if none supplied
     if (missing(xlab)) {
@@ -252,7 +253,8 @@
                        n = 100, unconditional = FALSE,
                        overall_uncertainty = TRUE,
                        dist = 0.1, rug = TRUE,
-                       partial_match = FALSE, ...) {
+                       partial_match = FALSE, 
+                       se = TRUE, ...) {
     scales <- match.arg(scales)
     S <- smooths(object)                # vector of smooth labels - "s(x)"
 
@@ -334,9 +336,9 @@
             if (is_fs_smooth(sm)) {
                 svar <- svar[[1L]]
             }
-            g[[i]] <- draw(l[[i]], rug = mf[[svar]])
+            g[[i]] <- draw(l[[i]], rug = mf[[svar]], se = se)
         } else {
-            g[[i]] <- draw(l[[i]])
+            g[[i]] <- draw(l[[i]], se = se)
         }
     }
 
