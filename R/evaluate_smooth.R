@@ -109,6 +109,10 @@
     evaluate_smooth(object[["gam"]], ...)
 }
 
+##' @export
+##' @rdname evaluate_smooth
+`evaluate_smooth.scam` <- evaluate_smooth.gam
+
 ## Random effect smooth
 ##' @importFrom tibble add_column tibble
 `evaluate_re_smooth` <- function(object, model = NULL, newdata = NULL,
@@ -604,39 +608,63 @@
 `spline_values` <- function(smooth, newdata, model, unconditional,
                             overall_uncertainty = TRUE, term) {
     X <- PredictMat(smooth, newdata)   # prediction matrix
-    if(any(grepl('mpi', class(smooth))))
-        X <- X[,-1]
     start <- smooth[["first.para"]]
     end <- smooth[["last.para"]]
     para.seq <- start:end
     coefs <- coef(model)[para.seq]
-    fit <- drop(X %*% coefs)
-
-    label <- smooth_label(smooth)
-    ## want full vcov for component-wise CI
-    V <- get_vcov(model, unconditional = unconditional)
-
-    ## variables for component-wise CIs for smooths
-    column_means <- model[["cmX"]]
-    lcms <- length(column_means)
-    nc <- ncol(V)
-    meanL1 <- smooth[["meanL1"]]
-
-    if (isTRUE(overall_uncertainty) && attr(smooth, "nCons") > 0L) {
-        if (lcms < nc) {
-            column_means <- c(column_means, rep(0, nc - lcms))
-        }
-        Xcm <- matrix(column_means, nrow = nrow(X), ncol = nc, byrow = TRUE)
-        if (!is.null(meanL1)) {
-            Xcm <- Xcm / meanL1
-        }
-        Xcm[, para.seq] <- X
-        rs <- rowSums((Xcm %*% V) * Xcm)
-    } else {
-        rs <- rowSums((X %*% V[para.seq, para.seq]) * X)
+    if(any(grepl('mpi', class(smooth))))
+    {
+        nr <- nrow(newdata)
+        onet <- matrix(rep(1,nr),1,nr)
+        A <- onet %*% X 
+        qrX <- qr(X)
+        R <- qr.R(qrX) 
+        qrA <- qr(t(A))
+        R <- R[-1,]
+        RZa <- t(qr.qty(qrA,t(R)))[,2:ncol(X)] 
+        RZa.inv <- solve(RZa)
+        RZaR <- RZa.inv%*%R
+        
+        XZa <- t(qr.qty(qrA,t(X)))[,2:ncol(X)]
+        Ga <- XZa%*%RZaR
+        Vp <- model$Vp.t[c(1,para.seq),c(1,para.seq)] 
+        Vp.c <- Vp
+        Vp.c[,1] <- rep(0,nrow(Vp))
+        Vp.c[1,] <- rep(0,ncol(Vp))
+        se.fit <- sqrt(rowSums((Ga%*%Vp.c)*Ga))
+        X <- X[,-1]
     }
-
-    se.fit <- sqrt(pmax(0, rs))
+    
+    fit <- drop(X %*% coefs)
+    label <- smooth_label(smooth)
+    
+    if(!any(grepl('mpi', class(smooth))))
+    {
+        ## want full vcov for component-wise CI
+        V <- get_vcov(model, unconditional = unconditional)
+        
+        ## variables for component-wise CIs for smooths
+        column_means <- model[["cmX"]]
+        lcms <- length(column_means)
+        nc <- ncol(V)
+        meanL1 <- smooth[["meanL1"]]
+        
+        if (isTRUE(overall_uncertainty) && attr(smooth, "nCons") > 0L) {
+            if (lcms < nc) {
+                column_means <- c(column_means, rep(0, nc - lcms))
+            }
+            Xcm <- matrix(column_means, nrow = nrow(X), ncol = nc, byrow = TRUE)
+            if (!is.null(meanL1)) {
+                Xcm <- Xcm / meanL1
+            }
+            Xcm[, para.seq] <- X
+            rs <- rowSums((Xcm %*% V) * Xcm)
+        } else {
+            rs <- rowSums((X %*% V[para.seq, para.seq]) * X)
+        }
+        
+        se.fit <- sqrt(pmax(0, rs))
+    }
 
     d <- smooth_dim(smooth)
     ## Return

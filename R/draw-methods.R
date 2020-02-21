@@ -371,6 +371,9 @@
     plot_grid(plotlist = g, align = align, axis = axis, ...)
 }
 
+#' @export
+`draw.scam` <- `draw.gam`
+
 ##' @param qq_line logical; draw a reference line through the lower and upper
 ##'   theoretical quartiles.
 ##'

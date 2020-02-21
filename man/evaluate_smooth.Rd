@@ -4,6 +4,7 @@
 \alias{evaluate_smooth}
 \alias{evaluate_smooth.gam}
 \alias{evaluate_smooth.gamm}
+\alias{evaluate_smooth.scam}
 \alias{evaluate_parametric_term}
 \alias{evaluate_parametric_term.gam}
 \title{Evaluate a smooth}
@@ -22,6 +23,17 @@ evaluate_smooth(object, ...)
 )
 
 \method{evaluate_smooth}{gamm}(object, ...)
+
+\method{evaluate_smooth}{scam}(
+  object,
+  smooth,
+  n = 100,
+  newdata = NULL,
+  unconditional = FALSE,
+  overall_uncertainty = TRUE,
+  dist = 0.1,
+  ...
+)
 
 evaluate_parametric_term(object, ...)
 

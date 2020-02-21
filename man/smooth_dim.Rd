@@ -4,6 +4,7 @@
 \alias{smooth_dim}
 \alias{smooth_dim.gam}
 \alias{smooth_dim.gamm}
+\alias{smooth_dim.scam}
 \alias{smooth_dim.mgcv.smooth}
 \title{Dimension of a smooth}
 \usage{
@@ -12,6 +13,8 @@ smooth_dim(object)
 \method{smooth_dim}{gam}(object)
 
 \method{smooth_dim}{gamm}(object)
+
+\method{smooth_dim}{scam}(object)
 
 \method{smooth_dim}{mgcv.smooth}(object)
 }

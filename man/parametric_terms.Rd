@@ -4,6 +4,7 @@
 \alias{parametric_terms}
 \alias{parametric_terms.default}
 \alias{parametric_terms.gam}
+\alias{parametric_terms.scam}
 \title{Names of any parametrix terms in a GAM}
 \usage{
 parametric_terms(model, ...)
@@ -11,6 +12,8 @@ parametric_terms(model, ...)
 \method{parametric_terms}{default}(model, ...)
 
 \method{parametric_terms}{gam}(model, ...)
+
+\method{parametric_terms}{scam}(model, ...)
 }
 \arguments{
 \item{model}{a fitted model.}

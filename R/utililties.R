@@ -52,6 +52,10 @@
 
 ##' @rdname smooth_dim
 ##' @export
+`smooth_dim.scam` <- smooth_dim.gam
+
+##' @rdname smooth_dim
+##' @export
 `smooth_dim.mgcv.smooth` <- function(object) {
     object[["dim"]]
 }
@@ -503,6 +507,10 @@
     }
     labs
 }
+
+##' @export
+##' @rdname parametric_terms
+`parametric_terms.scam` <- parametric_terms.gam
 
 ## Internal functions
 `by_smooth_failure` <- function(object) {
