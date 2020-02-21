@@ -4,9 +4,15 @@
 \alias{confint.fderiv}
 \title{Point-wise and simultaneous confidence intervals for derivatives of smooths}
 \usage{
-\method{confint}{fderiv}(object, parm, level = 0.95,
-  type = c("confidence", "simultaneous"), nsim = 10000, ncores = 1L,
-  ...)
+\method{confint}{fderiv}(
+  object,
+  parm,
+  level = 0.95,
+  type = c("confidence", "simultaneous"),
+  nsim = 10000,
+  ncores = 1L,
+  ...
+)
 }
 \arguments{
 \item{object}{an object of class \code{"fderiv"} containing the estimated
@@ -15,8 +21,8 @@ derivatives.}
 \item{parm}{which parameters (smooth terms) are to be given intervals as a
 vector of terms. If missing, all parameters are considered.}
 
-\item{level}{numeric, \code{0 < level < 1}; the confidence level of the
-point-wise or simultaneous interval. The default is \code{0.95} for a 95%
+\item{level}{numeric, \verb{0 < level < 1}; the confidence level of the
+point-wise or simultaneous interval. The default is \code{0.95} for a 95\%
 interval.}
 
 \item{type}{character; the type of interval to compute. One of \code{"confidence"}
@@ -49,9 +55,9 @@ derivatives of smooth terms in a fitted GAM.
 load_mgcv()
 \dontshow{
 set.seed(2)
-op <- options(digits = 5)
+op <- options(digits = 3, cli.unicode = FALSE)
 }
-dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
+dat <- gamSim(1, n = 1000, dist = "normal", scale = 2)
 mod <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat, method = "REML")
 
 ## first derivatives of all smooths...
@@ -62,8 +68,10 @@ ci <- confint(fd, type = "confidence")
 head(ci)
 
 ## simultaneous interval for smooth term of x1
+\dontshow{
 set.seed(42)
-x1.sint <- confint(fd, parm = "x1", type = "simultaneous", nsim = 1000)
+}
+x1.sint <- confint(fd, parm = "x1", type = "simultaneous", nsim = 2500)
 head(x1.sint)
 \dontshow{options(op)}
 }

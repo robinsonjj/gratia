@@ -9,15 +9,30 @@
 \usage{
 fitted_samples(model, ...)
 
-\method{fitted_samples}{gam}(model, n = 1, newdata, seed,
-  scale = c("response", "linear_predictor"), freq = FALSE,
-  unconditional = FALSE, ncores = 1L, ...)
+\method{fitted_samples}{gam}(
+  model,
+  n = 1,
+  newdata,
+  seed,
+  scale = c("response", "linear_predictor"),
+  freq = FALSE,
+  unconditional = FALSE,
+  ncores = 1L,
+  ...
+)
 
 predicted_samples(model, ...)
 
-\method{predicted_samples}{gam}(model, n = 1, newdata = NULL,
-  seed = NULL, freq = FALSE, unconditional = FALSE, weights = NULL,
-  ...)
+\method{predicted_samples}{gam}(
+  model,
+  n = 1,
+  newdata = NULL,
+  seed = NULL,
+  freq = FALSE,
+  unconditional = FALSE,
+  weights = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{a fitted model of the supported types}
@@ -82,17 +97,25 @@ and returned in a tidy, long, format.
 }
 \examples{
 load_mgcv()
-\dontshow{set.seed(2)}
-dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
+\dontshow{
+set.seed(2)
+op <- options(cli.unicode = FALSE)
+}
+dat <- gamSim(1, n = 1000, dist = "normal", scale = 2)
 m1 <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat, method = "REML")
 
 fitted_samples(m1, n = 5, seed = 42)
+\dontshow{options(op)}
 load_mgcv()
-\dontshow{set.seed(2)}
-dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
+\dontshow{
+set.seed(2)
+op <- options(cli.unicode = FALSE)
+}
+dat <- gamSim(1, n = 1000, dist = "normal", scale = 2)
 m1 <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat, method = "REML")
 
 predicted_samples(m1, n = 5, seed = 42)
+\dontshow{options(op)}
 }
 \author{
 Gavin L. Simpson

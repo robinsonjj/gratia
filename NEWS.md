@@ -1,4 +1,16 @@
-# gratia (development version)
+# gratia 0.3.1 (in development)
+
+## New features
+
+* New functions `link()` and `inv_link()` to access the link function and its
+  inverse from fitted models and family functions.
+  
+  Methods for classes: `"glm"`, `"gam"`, `"bam"`, `"gamm"` currently. [#58](https://github.com/gavinsimpson/gratia/issues/58)
+
+* Adds explicit `family()` methods for objects of classes `"gam"`, `"bam"`, and
+  `"gamm"`.
+
+# gratia 0.3.0
 
 ## New features
 
@@ -27,7 +39,7 @@
     multiple covariates/smooths. [#47](https://github.com/gavinsimpson/gratia/issues/47)
 
     `derivatives()` also now handles `'fs'` smooths.  Reported by
-    @tomand-uio [#57](https://github.com/gavinsimpson/gratia/issues/357).
+    @tomand-uio [#57](https://github.com/gavinsimpson/gratia/issues/57).
 
 * `evaluate_parametric_term()` and hence `draw.gam()` would fail on a `ziplss()` model
   because i) *gratia* didn't handle parametric terms in models with multiple linear
