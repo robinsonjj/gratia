@@ -571,9 +571,19 @@
     ind <- match(term, vars)
 
     ## take the actual mgcv version of the names for the `terms` argument
-    evaluated <- as.data.frame(predict(object, newdata = mf, type = 'terms',
-                                       terms = mgcv_names[ind], se = TRUE,
-                                       unconditional = unconditional))
+    if(inherits(object, 'scam')){
+      #the terms argument in predict.scam doesn't seem to work, so predict everything and 
+      #then subset out the terms that we want
+      evaluated <- predict(object, newdata = mf, type = 'terms',
+                           se = TRUE, unconditional = unconditional)
+      evaluated <- lapply(evaluated, function(x) x[,mgcv_names[ind],drop=FALSE])
+      evaluated <- as.data.frame(evaluated)
+    }else{
+      evaluated <- as.data.frame(predict(object, newdata = mf, type = 'terms',
+                                         terms = mgcv_names[ind], se = TRUE,
+                                         unconditional = unconditional))  
+    }
+    
     evaluated <- setNames(evaluated, c("partial", "se"))
     evaluated <- as_tibble(evaluated)
 
@@ -602,6 +612,10 @@
     class(evaluated) <- c("evaluated_parametric_term", class(evaluated))
     evaluated                           # return
 }
+
+##' @rdname evaluate_smooth
+##' @export
+`evaluate_parametric_term.scam` <- evaluate_parametric_term.gam
 
 ## loop over smooths and predict
 ##' @importFrom tibble tibble
