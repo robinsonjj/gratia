@@ -7,6 +7,7 @@
 \alias{evaluate_smooth.scam}
 \alias{evaluate_parametric_term}
 \alias{evaluate_parametric_term.gam}
+\alias{evaluate_parametric_term.scam}
 \title{Evaluate a smooth}
 \usage{
 evaluate_smooth(object, ...)
@@ -38,6 +39,8 @@ evaluate_smooth(object, ...)
 evaluate_parametric_term(object, ...)
 
 \method{evaluate_parametric_term}{gam}(object, term, unconditional = FALSE, ...)
+
+\method{evaluate_parametric_term}{scam}(object, term, unconditional = FALSE, ...)
 }
 \arguments{
 \item{object}{an object of class \code{"gam"} or \code{"gamm"}.}

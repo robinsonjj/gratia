@@ -18,6 +18,7 @@
   title = NULL,
   subtitle = NULL,
   caption = NULL,
+  se = TRUE,
   ...
 )
 

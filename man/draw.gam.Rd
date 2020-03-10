@@ -17,6 +17,7 @@
   dist = 0.1,
   rug = TRUE,
   partial_match = FALSE,
+  se = TRUE,
   ...
 )
 }
